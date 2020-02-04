@@ -1,0 +1,26 @@
+$background-color:  #eb9c3c;
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$updated-color:     rgba(255, 255, 255, 0.7);
+
+.widget-innogy-cp {
+
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+    margin-bottom: 15px;
+  }
+  .updated-at {
+    color: $updated-color;
+  }
+  .state {
+    font-size: 42px;
+    font-weight:bold;
+  }
+}
+
+.red { background-color:#9A2039; }
+.yellow { background-color:#F17F5B; }
+.green { background-color:#3B985F; }
+.gray { background-color:gray; }
