@@ -2,7 +2,7 @@
 
 Hi, I'm a [Smashing](https://github.com/Smashing/smashing) widget that displays the current state of charge points operated by innogy.
 
-##Dependencies
+## Dependencies
 
 [faraday](https://github.com/lostisland/faraday) and [faraday_middleware](https://github.com/lostisland/faraday_middleware)
 
@@ -13,7 +13,7 @@ Add it to smashings' gemfile:
 
 and run `bundle install`.
 
-##Usage
+## Usage
 
 To use this widget, copy `innogy_cp.html`, `innogy_cp.coffee`, and `innogy_cp.scss` into a `/widgets/innogy_cp` directory, and copy the `innogy_cp.rb` file into your `/jobs` folder.
 
