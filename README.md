@@ -1,4 +1,4 @@
-## Description
+# Smashing Innogy Status Widget
 
 Hi, I'm a [Smashing](https://github.com/Smashing/smashing) widget that displays the current state of charge points operated by innogy.
 
