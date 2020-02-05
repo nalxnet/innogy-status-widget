@@ -1,16 +1,22 @@
-require 'faraday'
-require 'faraday_middleware'
+require "net/http"
+require "json"
 
-conn = Faraday.new(:url => 'https://www.rwe-mobility.com', :headers => { 'Accept' => 'application/json' }) do |conn|
-  conn.response :json, :content_type => /\bjson$/
-  conn.adapter Faraday.default_adapter
-end
+chargepoint1 = "XX-1234-5"
+chargepoint2 = "YY-6789-0"
 
+SCHEDULER.every '10m', :first_in => 0 do |job|
+  uri_cp1 = URI('https://www.rwe-mobility.com/charging/api/v2/charge-point/#{chargepoint1}/')
+  raw_cp1 = Net::HTTP.get(uri)
+  data_cp1 = JSON.parse raw_cp1
 
-SCHEDULER.every '30m', :first_in => 0 do |job|
-  response_cp1 = conn.get '/charging/api/v2/charge-point/my-chargepoint-id-1/'
-  send_event("innogy-cp-1", cp_state: response_cp1.body["charger"]["chargePoints"]["evseStatus"])
+  uri_cp2 = URI('https://www.rwe-mobility.com/charging/api/v2/charge-point/#{chargepoint2}/')
+  raw_cp1 = Net::HTTP.get(uri)
+  data_cp1 = JSON.parse raw_cp1
 
-  response_cp2 = conn.get '/charging/api/v2/charge-point/my-chargepoint-id-2/'
-  send_event("innogy-cp-2", cp_state: response_cp2.body["charger"]["chargePoints"]["evseStatus"])
+  send_event "innogy-cp", {
+    cp1_id: data_cp1["charger"]["chargePoints"]["name"],
+    cp1_state: data_cp1["charger"]["chargePoints"]["evseStatus"],
+    cp2_id: data_cp1["charger"]["chargePoints"]["name"],
+    cp2_state: data_cp2["charger"]["chargePoints"]["evseStatus"]
+  }
 end
