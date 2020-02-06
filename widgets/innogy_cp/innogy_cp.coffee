@@ -1,13 +1,12 @@
 class Dashing.InnogyCp extends Dashing.Widget
 
   onData: (data) ->
-    cp1_state = @get('cp1_state')
-    cp2_state = @get('cp2_state')
+    charger_state = @get('charger_state')
 
     colorclass = switch
-      when cp1_state == "AVAILABLE" && cp2_state == "AVAILABLE" then 'green'
-      when cp1_state == "OUT_OF_SERVICE" || cp2_state == "OUT_OF_SERVICE" then 'red'
-      when cp1_state == "OCCUPIED" || cp2_state == "OCCUPIED" then 'yellow'
+      when charger_state == "AVAILABLE" then 'green'
+      when charger_state == "PART_AVAILABLE" || charger_state == "OCCUPIED" then 'yellow'
+      when charger_state == "OUT_OF_SERVICE" then 'red'
       else 'gray'
 
     node = $(@node)

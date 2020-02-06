@@ -1,30 +1,33 @@
-$background-color:  #eb9c3c;
-
-$title-color:       rgba(255, 255, 255, 0.7);
-$updated-color:     rgba(255, 255, 255, 0.7);
-
 .widget-innogy-cp {
-
-  background-color: $background-color;
+  vertical-align: top !important;
+  background-color: gray;
+  //use any icon you like for a nicer background, e.g. fontawesome plug icon
+  //background-image: url("icon-fa-plug.svg");
+  //background-position: center;
+  //background-repeat: no-repeat;
+  //background-size: 40%;
 
   .title {
-    color: $title-color;
-    margin-bottom: 15px;
+    color: white;
+		font-weight: bold;
+    margin-top: 24px;
+		margin-bottom: 36px;
   }
   .chargepoint-id {
-    font-size: 32px;
-    font-weight:bold;
+    font-size: 18px;
+    margin-top: 14px;
+    font-weight: normal;
   }
   .state {
-    font-size: 42px;
-    font-weight:bold;
+    font-size: 32px;
+    font-weight: bold;
   }
   .updated-at {
-    color: $updated-color;
+    color: #D3D3D3;
   }
 }
 
-.red { background-color:#9A2039; }
-.yellow { background-color:#F17F5B; }
-.green { background-color:#3B985F; }
-.gray { background-color:gray; }
+.red { background-color: #9A2039; }
+.yellow { background-color: #F17F5B; }
+.green { background-color: #3B985F; }
+.gray { background-color: gray; }

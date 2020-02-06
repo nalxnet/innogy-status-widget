@@ -6,6 +6,10 @@ Hi, I'm a [Smashing](https://github.com/Smashing/smashing) widget that displays 
 
 To use this widget, copy `innogy_cp.html`, `innogy_cp.coffee`, and `innogy_cp.scss` into a `/widgets/innogy_cp` directory, and copy the `innogy_cp.rb` file into your `/jobs` folder. You also have to set the chargepoint IDs of your charging station in the `innogy_cp.rb` job.
 
+Chargepoint state is translated in `innogy_cp.rb`, adapt it to your needs if necessary.
+
+To use an icon for the background, uncomment the corresponding lines in `innogy_cp.scss`.
+
 
 To include the widget in a dashboard, add the following snippet to the dashboard layout file:
 
