@@ -4,7 +4,7 @@ Hi, I'm a [Smashing](https://github.com/Smashing/smashing) widget that displays 
 
 ## Usage
 
-To use this widget, copy `innogy_cp.html`, `innogy_cp.coffee`, and `innogy_cp.scss` into a `/widgets/innogy_cp` directory, and copy the `innogy_cp.rb` file into your `/jobs` folder. You also have to set the chargepoint IDs of your charging station in the `innogy_cp.rb` job.
+To use this widget, copy `innogy_cp.html`, `innogy_cp.coffee`, and `innogy_cp.scss` into a `/widgets/innogy_cp` directory, and copy the `innogy_cp.rb` file into your `/jobs` folder. You also have to set the ID of your charging station in the `innogy_cp.rb` job.
 
 Chargepoint state is translated in `innogy_cp.rb`, adapt it to your needs if necessary.
 

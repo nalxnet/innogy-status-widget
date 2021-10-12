@@ -2,30 +2,46 @@ require "net/http"
 require "json"
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
-  data_cp1 = get_chargepoint_data 'XX-1234-5'
-  data_cp2 = get_chargepoint_data 'YY-6789-0'
+  data_cp = get_chargepoint_data 'ST12345'
 
   send_event "innogy-cp", {
-    cp1_id: get_chargepoint_name(data_cp1),
-    cp1_state: get_chargepoint_state(data_cp1),
-    cp2_id: get_chargepoint_name(data_cp2),
-    cp2_state: get_chargepoint_state(data_cp2),
-    charger_state: get_charger_state(data_cp1, data_cp2)
+    cp1_id: get_chargepoint_name(data_cp, 0),
+    cp1_state: get_chargepoint_state(data_cp, 0),
+    cp2_id: get_chargepoint_name(data_cp, 1),
+    cp2_state: get_chargepoint_state(data_cp, 1),
+    charger_state: get_charger_state(data_cp)
   }
 end
 
 def get_chargepoint_data(id)
-  uri = URI("https://www.rwe-mobility.com/charging/api/v2/charge-point/#{id}/")
-  raw = Net::HTTP.get(uri)
-  return JSON.parse raw
+  query = {
+    "operationName" => "GetChargeStation",
+    "variables" => {
+      "names" => [
+        id
+      ]
+    },
+    "query" => "query GetChargeStation($names: [String!]) { chargeStation(names: $names) { name chargePoints { name evseStatus }}}"
+  }.to_json
+
+  uri = URI("https://api.innogy-mobility.com/bff/echarge/graphql")
+  req = Net::HTTP::Post.new(uri)
+  req.basic_auth("ECHARGE_API_USR", "KJRzxoC1nv!")
+  req.body = "#{query}"
+
+  res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) do |http|
+    http.request(req)
+  end
+
+  return JSON.parse res.body
 end
 
-def get_chargepoint_name(data)
-  return data["charger"]["chargePoints"]["name"]
+def get_chargepoint_name(data, idx)
+  return data.dig "data", "chargeStation", 0, "chargePoints", idx, "name"
 end
 
-def get_chargepoint_state(data, raw=false)
-  raw_data = data["charger"]["chargePoints"]["evseStatus"]
+def get_chargepoint_state(data, idx, raw=false)
+  raw_data = data.dig "data", "chargeStation", 0, "chargePoints", idx, "evseStatus"
   if raw
     return raw_data
   end
@@ -43,9 +59,9 @@ def get_chargepoint_state(data, raw=false)
   end
 end
 
-def get_charger_state(data1, data2)
-  cp1 = get_chargepoint_state(data1, true)
-  cp2 = get_chargepoint_state(data2, true)
+def get_charger_state(data)
+  cp1 = get_chargepoint_state(data, 0, true)
+  cp2 = get_chargepoint_state(data, 1, true)
 
   if cp1 == "AVAILABLE" && cp2 == "AVAILABLE"
     return "AVAILABLE"
