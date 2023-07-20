@@ -2,7 +2,7 @@ require "net/http"
 require "json"
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
-  data_cp = get_chargepoint_data 'ST12345'
+  data_cp = get_chargepoint_data '12345678-0my0-uuid-abcd-1234567890ab'
 
   send_event "innogy-cp", {
     cp1_id: get_chargepoint_name(data_cp, 0),
@@ -17,15 +17,16 @@ def get_chargepoint_data(id)
   query = {
     "operationName" => "GetChargeStation",
     "variables" => {
-      "names" => [
+      "uuids" => [
         id
-      ]
+      ],
+      "userEmaids" => []
     },
-    "query" => "query GetChargeStation($names: [String!]) { chargeStation(names: $names) { name chargePoints { name evseStatus }}}"
+    "query" => "query GetChargeStation($uuids: [String!], $userEmaids: [String]) { chargeStationsV2(uuids: $uuids userEmaids: $userEmaids) { name chargePoints { name evseStatus }}}"
   }.to_json
 
-  uri = URI("https://api.innogy-mobility.com/bff/echarge/graphql")
-  req = Net::HTTP::Post.new(uri)
+  uri = URI("https://api.services-emobility.com/bff/echarge/graphql")
+  req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
   req.basic_auth("ECHARGE_API_USR", "KJRzxoC1nv!")
   req.body = "#{query}"
 
@@ -37,11 +38,11 @@ def get_chargepoint_data(id)
 end
 
 def get_chargepoint_name(data, idx)
-  return data.dig "data", "chargeStation", 0, "chargePoints", idx, "name"
+  return data.dig "data", "chargeStationsV2", 0, "chargePoints", idx, "name"
 end
 
 def get_chargepoint_state(data, idx, raw=false)
-  raw_data = data.dig "data", "chargeStation", 0, "chargePoints", idx, "evseStatus"
+  raw_data = data.dig "data", "chargeStationsV2", 0, "chargePoints", idx, "evseStatus"
   if raw
     return raw_data
   end
